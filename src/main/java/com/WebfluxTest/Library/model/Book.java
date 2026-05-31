@@ -11,7 +11,18 @@ public class Book {
     @Id
     private String ID;
     private String title;
+    private String author;
+    private Double rating;
 
+    // Construtor.
+    public Book (String ID, String title, String author, Double rating) {
+        this.ID = ID;
+        this.title = title;
+        this.author = author;
+        this.rating = rating;
+    }
+
+    // Sobrescreve equals e hashCode para comparação de objetos.
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
@@ -19,15 +30,13 @@ public class Book {
         return Objects.equals(ID, book.ID) && Objects.equals(title, book.title) && Objects.equals(author, book.author) && Objects.equals(rating, book.rating);
     }
 
+    // Sobrescreve hashCode para garantir que objetos iguais tenham o mesmo hash.
     @Override
     public int hashCode() {
         return Objects.hash(ID, title, author, rating);
     }
 
-    private String author;
-    private Double rating;
-
-
+//Getters e Setters para os campos da classe.
     public String getID() {
         return ID;
     }
@@ -60,6 +69,7 @@ public class Book {
         this.rating = rating;
     }
 
+    // Sobrescreve toString para exibir informações do livro de forma legível caso já não sejam.
     @Override
     public String toString() {
         return "Book{" +
