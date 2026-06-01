@@ -24,9 +24,9 @@ public class Book {
 
     // Sobrescreve equals e hashCode para comparação de objetos.
     @Override
-    public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-        Book book = (Book) o;
+    public boolean equals(Object object) {
+        if (object == null || getClass() != object.getClass()) return false;
+        Book book = (Book) object;
         return Objects.equals(ID, book.ID) && Objects.equals(title, book.title) && Objects.equals(author, book.author) && Objects.equals(rating, book.rating);
     }
 
