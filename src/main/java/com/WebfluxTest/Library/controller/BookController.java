@@ -62,6 +62,25 @@ import static org.apache.commons.lang3.StringUtils.defaultIfEmpty;
                 );
     }
 
+
+    @PostMapping
+    @ResponseStatus(code = org.springframework.http.HttpStatus.CREATED)
+    public Flux<Book> createBooks(@RequestBody Flux<Book> books) {
+        return books.flatMap(book -> {
+            Query query = Query.query(Criteria.where("_id").is("books"));
+            Update update = new Update().inc("seq", 1);
+            FindAndModifyOptions options = FindAndModifyOptions.options().returnNew(true).upsert(true);
+
+            return operations.findAndModify(query, update, options, SequenceCounter.class)
+                    .map(SequenceCounter::getSeq)
+                    .flatMap(id -> {
+                        book.setID(String.valueOf(id));
+                        return repository.save(book);
+                    });
+        });
+    }
+
+
     //Endpoint que busca um livro por ID, e se existir, atualiza os campos com os dados fornecidos.
     @PutMapping
     @ResponseStatus(code = org.springframework.http.HttpStatus.OK)
