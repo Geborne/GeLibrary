@@ -126,9 +126,10 @@ import static org.apache.commons.lang3.StringUtils.defaultIfEmpty;
 
     // Endpoint que simula um stream de eventos relacionados a livros. Flux.
     @GetMapping(value = "/events", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-            public Flux<BookEvent> getBookEvents() {
-                return Flux.interval(Duration.ofSeconds(5))
-                        .map(val -> new BookEvent(val, "Book Event - " + val));
-            }
+    public Flux<BookEvent> getBookEvents() {
+        return Flux.interval(Duration.ofSeconds(5))
+                .flatMap(val -> repository.findAll()
+                        .map(book -> new BookEvent(book, "Book Event")));
+    }
 
 }

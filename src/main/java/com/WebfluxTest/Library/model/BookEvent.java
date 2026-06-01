@@ -4,7 +4,7 @@ public class BookEvent {
     private Book book;
     private String eventType;
 
-    public BookEvent(Long book, String eventType) {
+    public BookEvent(Book book, String eventType) {
         this.book = book;
         this.eventType = eventType;
     }
