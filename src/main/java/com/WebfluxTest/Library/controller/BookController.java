@@ -2,16 +2,20 @@ package com.WebfluxTest.Library.controller;
 
 import com.WebfluxTest.Library.Repository.LibraryRepository;
 import com.WebfluxTest.Library.model.Book;
+import com.WebfluxTest.Library.model.BookEvent;
 import com.WebfluxTest.Library.model.SequenceCounter;
 import org.springframework.data.mongodb.core.ReactiveMongoOperations;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.time.Duration;
 
 import static org.apache.commons.lang3.StringUtils.defaultIfEmpty;
 
@@ -118,6 +122,14 @@ import static org.apache.commons.lang3.StringUtils.defaultIfEmpty;
     public Mono<ResponseEntity<Void>> emptybookDB() {
         return repository.deleteAll()
                 .then(Mono.just(ResponseEntity.ok().<Void>build()));
+    }
+
+    // Endpoint que simula um stream de eventos relacionados a livros. Flux.
+    @GetMapping(value = "/events", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public Flux<BookEvent> getBookEvents() {
+        return Flux.interval(Duration.ofSeconds(5))
+                .flatMap(val -> repository.findAll()
+                        .map(book -> new BookEvent(book, "Book Event")));
     }
 
 }
