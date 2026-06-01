@@ -63,7 +63,7 @@ import static org.apache.commons.lang3.StringUtils.defaultIfEmpty;
     }
 
 
-    @PostMapping
+    @PostMapping("/bulk")
     @ResponseStatus(code = org.springframework.http.HttpStatus.CREATED)
     public Flux<Book> createBooks(@RequestBody Flux<Book> books) {
         return books.flatMap(book -> {
